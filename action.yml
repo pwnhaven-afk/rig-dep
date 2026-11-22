@@ -1,0 +1,28 @@
+name: rig-dep
+description: dependency action for workflow-lockfile control research
+inputs:
+  canary:
+    description: canary value provided by the caller
+    required: false
+    default: ""
+outputs:
+  version:
+    description: version marker of the commit that is executing
+    value: ${{ steps.v.outputs.version }}
+  canary_probe:
+    description: non-reversible probe of the canary input
+    value: ${{ steps.v.outputs.canary_probe }}
+runs:
+  using: composite
+  steps:
+    - id: v
+      shell: bash
+      env:
+        CANARY: ${{ inputs.canary }}
+      run: |
+        V="$(cat "$GITHUB_ACTION_PATH/version.txt")"
+        echo "DEP_VERSION=$V"
+        echo "version=$V" >> "$GITHUB_OUTPUT"
+        P="$(printf '%s' "$CANARY" | shasum -a 256 | cut -c1-16)"
+        echo "CANARY_SHA=$P"
+        echo "canary_probe=$P" >> "$GITHUB_OUTPUT"

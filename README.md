@@ -1,2 +1,4 @@
 # rig-dep
-lockfile control rig: dependency action (owner: pwnhaven-afk, bounty research)
+
+Authorized bug-bounty research rig (GitHub Actions workflow dependency lockfiles).
+Owned by the researcher; no third-party code or data.
